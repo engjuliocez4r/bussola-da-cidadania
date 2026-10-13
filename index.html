@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Bússola Eleitoral — o que as suas prioridades dizem sobre o seu voto</title>
+<script>document.documentElement.setAttribute("data-theme",window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
+<style>
+  :root{
+    --paper:#faf9f7;
+    --card:#ffffff;
+    --ink:#17181a;
+    --ink-inv:#faf9f7;
+    --ink-soft:#4b4e52;
+    --grey:#7c7f84;
+    --rule:#e3e1dc;
+    --rule-soft:#efedea;
+    --shade:#f2f0ed;
+    --dot:#b9b6b0;
+    --radius:10px;
+    --max:600px;
+  }
+  html[data-theme="dark"]{
+    --paper:#131416;
+    --card:#1c1d1f;
+    --ink:#f2f1ee;
+    --ink-inv:#131416;
+    --ink-soft:#c3c2bf;
+    --grey:#8e9195;
+    --rule:#303234;
+    --rule-soft:#262729;
+    --shade:#212325;
+    --dot:#5c5f63;
+  }
+  html{background:var(--paper)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:0 16px calc(40px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:var(--max);margin:0 auto}
+
+  /* ---------- topo ---------- */
+  header.top{
+    padding:28px 0 18px;
+    border-bottom:1px solid var(--rule);
+    margin-bottom:24px;
+  }
+  .mark{
+    display:flex;align-items:baseline;gap:10px;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.35rem;letter-spacing:-.01em;
+  }
+  .mark .needle{
+    display:inline-block;width:12px;height:12px;border-radius:50%;
+    border:2px solid var(--ink);position:relative;flex:none;
+    align-self:center;
+  }
+  .mark .needle::after{
+    content:"";position:absolute;left:50%;top:50%;
+    width:2px;height:8px;background:var(--ink);
+    transform:translate(-50%,-50%) rotate(28deg);border-radius:1px;
+  }
+  header.top p{
+    margin:12px 0 0;color:var(--grey);font-size:.9rem;max-width:44ch;
+  }
+  .brandline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .theme{
+    background:none;border:1px solid var(--rule);border-radius:999px;
+    padding:7px 13px;font-size:.8rem;color:var(--ink-soft);
+    display:flex;align-items:center;gap:7px;flex:none;
+  }
+  .theme:active{background:var(--shade)}
+  .theme .glyph{
+    width:12px;height:12px;border-radius:50%;flex:none;
+    background:linear-gradient(90deg,var(--ink) 0 50%,transparent 50% 100%);
+    border:1.5px solid var(--ink);
+  }
+  .epigraph{
+    border-left:2px solid var(--rule);
+    padding:2px 0 2px 16px;margin:22px 0 0;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1rem;line-height:1.5;color:var(--ink-soft);max-width:50ch;
+  }
+  .sig{
+    margin:0 0 8px;color:var(--ink);font-size:.82rem;
+  }
+  @media (max-width:400px){
+    .theme span:last-child{display:none}
+    .theme{padding:8px 10px}
+    .mark{font-size:1.2rem}
+  }
+
+  /* ---------- ecrãs ---------- */
+  .screen{display:none}
+  .screen.on{display:block}
+
+  /* ---------- introdução ---------- */
+  .lede{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.4rem;line-height:1.4;letter-spacing:-.01em;
+    margin:0 0 18px;max-width:26ch;
+  }
+  .intro p{color:var(--ink-soft);font-size:.98rem;max-width:60ch}
+  .facts{
+    border-top:1px solid var(--rule);
+    margin:22px 0;
+  }
+  .fact{
+    display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule-soft);
+    font-size:.92rem;color:var(--ink-soft);
+  }
+  .fact b{
+    flex:none;width:2.6em;color:var(--ink);
+    font-family:Georgia,serif;font-size:1.05rem;line-height:1.3;
+  }
+
+  /* ---------- botões ---------- */
+  button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+  .primary{
+    width:100%;background:var(--ink);color:var(--ink-inv);border:0;
+    padding:15px 18px;border-radius:var(--radius);
+    font-size:1rem;font-weight:600;letter-spacing:.01em;
+  }
+  .primary:active{filter:brightness(.82)}
+  .ghost{
+    background:none;border:1px solid var(--rule);color:var(--ink-soft);
+    padding:11px 16px;border-radius:var(--radius);font-size:.9rem;
+  }
+  .ghost:active{background:var(--shade)}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  /* ---------- questionário ---------- */
+  .counter{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.82rem;color:var(--grey);margin-bottom:10px;
+  }
+  .track{height:2px;background:var(--rule);margin-bottom:26px;overflow:hidden}
+  .track i{display:block;height:100%;background:var(--ink);width:0;transition:width .28s ease}
+  .topic{
+    font-size:.8rem;color:var(--grey);margin-bottom:8px;
+  }
+  .statement{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.28rem;line-height:1.45;letter-spacing:-.005em;
+    margin:0 0 6px;
+  }
+  .hint{font-size:.85rem;color:var(--grey);margin:0 0 20px;max-width:52ch}
+  .scale{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .opt{
+    display:flex;align-items:center;gap:12px;
+    background:var(--card);border:1px solid var(--rule);
+    padding:13px 15px;border-radius:var(--radius);
+    text-align:left;width:100%;font-size:.97rem;
+    transition:border-color .12s ease,background .12s ease;
+  }
+  .opt:hover{border-color:var(--grey)}
+  .opt:active{background:var(--shade)}
+  .opt .dot{
+    flex:none;width:12px;height:12px;border-radius:50%;
+    border:1.5px solid var(--grey);
+  }
+  .opt[data-v="2"] .dot{background:var(--ink);border-color:var(--ink)}
+  .opt[data-v="1"] .dot{background:var(--grey);border-color:var(--grey)}
+  .opt[data-v="-1"] .dot{background:var(--card);border-color:var(--grey);box-shadow:inset 0 0 0 3px var(--card)}
+  .opt[data-v="-2"] .dot{background:var(--card);border-color:var(--ink);border-width:3px}
+  .opt[data-v="0"] .dot{border-style:dashed}
+  .rowbtns{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .weight{
+    background:none;border:1px solid var(--rule);border-radius:var(--radius);
+    padding:10px 14px;font-size:.86rem;color:var(--grey);
+    display:flex;align-items:center;gap:8px;
+  }
+  .weight[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--shade)}
+  .weight .box{width:11px;height:11px;border:1.5px solid currentColor;border-radius:3px;flex:none}
+  .weight[aria-pressed="true"] .box{background:var(--ink);border-color:var(--ink)}
+
+  /* ---------- resultados ---------- */
+  .rhead{font-family:Georgia,serif;font-size:1.5rem;margin:4px 0 6px;letter-spacing:-.01em}
+  .rsub{color:var(--grey);font-size:.9rem;margin:0 0 24px;max-width:52ch}
+  .block{margin-bottom:34px}
+  .block > h3{
+    font-size:.95rem;margin:0 0 4px;font-weight:600;
+  }
+  .block > .note{font-size:.85rem;color:var(--grey);margin:0 0 18px;max-width:56ch}
+
+  .axis{margin-bottom:22px}
+  .axis .name{font-size:.86rem;color:var(--ink-soft);margin-bottom:9px}
+  .axis .line{
+    position:relative;height:34px;
+  }
+  .axis .rail{
+    position:absolute;top:22px;left:0;right:0;height:1px;background:var(--rule);
+  }
+  .axis .mid{
+    position:absolute;top:17px;left:50%;width:1px;height:11px;background:var(--rule);
+  }
+  .axis .you{
+    position:absolute;top:14px;width:15px;height:15px;border-radius:50%;
+    background:var(--ink);transform:translateX(-50%);
+    border:3px solid var(--paper);
+  }
+  .axis .party{
+    position:absolute;top:19px;width:7px;height:7px;border-radius:50%;
+    background:var(--dot);transform:translateX(-50%);
+  }
+  .axis .poles{
+    display:flex;justify-content:space-between;font-size:.75rem;color:var(--grey);
+    margin-top:2px;gap:12px;
+  }
+  .axis .poles span:last-child{text-align:right}
+  .axis.skipped .you{background:var(--paper);border:2px solid var(--grey);top:15px;width:13px;height:13px}
+
+  .party-row{
+    border-top:1px solid var(--rule-soft);padding:14px 0;
+  }
+  .party-row:first-of-type{border-top:1px solid var(--rule)}
+  .party-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .party-top .nm{font-weight:600;font-size:1rem}
+  .party-top .nm small{font-weight:400;color:var(--grey);font-size:.82rem;display:block;margin-top:1px}
+  .party-top .pc{font-family:Georgia,serif;font-size:1.15rem;flex:none}
+  .bar{height:5px;background:var(--rule-soft);margin-top:10px;border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--grey);border-radius:3px}
+  .party-row.lead .bar i{background:var(--ink)}
+  .gap{font-size:.83rem;color:var(--grey);margin-top:9px}
+
+  details{border-top:1px solid var(--rule);padding:14px 0}
+  details summary{
+    cursor:pointer;font-size:.92rem;font-weight:600;list-style:none;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--grey);font-size:1.1rem}
+  details[open] summary::after{content:"–"}
+  details .body{font-size:.89rem;color:var(--ink-soft);margin-top:12px}
+  details .body p{margin:0 0 10px}
+  details .body ul{margin:0 0 10px;padding-left:18px}
+  details .body li{margin-bottom:6px}
+
+  .disclaimer{
+    background:var(--shade);border-radius:var(--radius);
+    padding:16px 18px;font-size:.86rem;color:var(--ink-soft);
+    margin:0 0 28px;
+  }
+  .disclaimer b{color:var(--ink)}
+
+  /* ---------- seleção em dois passos ---------- */
+  .opt.sel{border-color:var(--ink);background:var(--shade)}
+  .opt.sel .dot{box-shadow:0 0 0 3px var(--paper),0 0 0 4.5px var(--ink)}
+  .advance{
+    width:100%;background:var(--ink);color:var(--ink-inv);border:0;
+    padding:15px 18px;border-radius:var(--radius);font-size:1rem;font-weight:600;
+    margin:4px 0 14px;
+  }
+  .advance:disabled{background:var(--rule);color:var(--grey);cursor:default}
+  .advance:not(:disabled):active{filter:brightness(.82)}
+
+  /* ---------- revisão ---------- */
+  .rev{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
+  .rev li{border-bottom:1px solid var(--rule-soft)}
+  .rev button{
+    width:100%;background:none;border:0;text-align:left;padding:14px 0;
+    display:grid;grid-template-columns:1.8em 1fr auto;gap:4px 10px;align-items:baseline;
+  }
+  .rev .n{color:var(--grey);font-size:.8rem;font-family:Georgia,serif}
+  .rev .q{font-size:.9rem;line-height:1.45;color:var(--ink)}
+  .rev .a{font-size:.8rem;color:var(--grey);grid-column:2;display:flex;gap:8px;flex-wrap:wrap}
+  .rev .a b{color:var(--ink-soft);font-weight:600}
+  .rev .edit{color:var(--grey);font-size:.78rem;grid-row:1 / span 2;align-self:center}
+  .rev button:hover .edit{color:var(--ink)}
+
+  /* ---------- autoria e transparência ---------- */
+  .who{border-top:1px solid var(--rule);margin-top:26px;padding-top:18px}
+  .who .name{font-family:Georgia,"Times New Roman",serif;font-size:1rem;color:var(--ink);margin:0 0 6px}
+  .who p{margin:0 0 10px;font-size:.84rem;color:var(--grey);max-width:56ch}
+  .who a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule)}
+  .who a:hover{border-color:var(--ink)}
+  .proof{
+    background:var(--shade);border-radius:var(--radius);padding:14px 16px;
+    font-size:.85rem;color:var(--ink-soft);margin:16px 0 0;max-width:56ch;
+  }
+  .proof b{color:var(--ink)}
+
+  /* ---------- cidadania ---------- */
+  .civic{
+    border-top:3px solid var(--ink);
+    margin-top:40px;padding-top:24px;
+  }
+  .civic .kicker{
+    font-size:1.05rem;font-weight:700;letter-spacing:.06em;
+    margin:0 0 12px;line-height:1.35;
+  }
+  .civic .call{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.08rem;line-height:1.55;color:var(--ink-soft);
+    margin:0 0 8px;max-width:52ch;
+  }
+  .steps{counter-reset:s;margin:0;padding:0;list-style:none}
+  .steps li{
+    counter-increment:s;position:relative;
+    padding:0 0 16px 34px;font-size:.93rem;color:var(--ink-soft);
+  }
+  .steps li::before{
+    content:counter(s);position:absolute;left:0;top:0;
+    width:22px;height:22px;border:1px solid var(--rule);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.75rem;color:var(--ink);
+  }
+  .steps li b{color:var(--ink);font-weight:600}
+  .thresholds{
+    border:1px solid var(--rule);border-radius:var(--radius);
+    padding:4px 16px;margin:18px 0;
+  }
+  .thresholds div{
+    display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--rule-soft);
+    font-size:.87rem;color:var(--ink-soft);
+  }
+  .thresholds div:last-child{border-bottom:0}
+  .thresholds b{flex:none;width:5.6em;color:var(--ink);font-weight:600}
+  .field{
+    display:flex;gap:8px;margin:14px 0 4px;flex-wrap:wrap;
+  }
+  .field input{
+    flex:1 1 190px;min-width:0;
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:13px 14px;font-family:inherit;font-size:1rem;color:var(--ink);
+  }
+  .field input::placeholder{color:var(--grey)}
+  .field button{
+    flex:none;background:var(--ink);color:var(--ink-inv);border:0;
+    border-radius:var(--radius);padding:13px 18px;font-weight:600;font-size:.92rem;
+  }
+  .links{margin:16px 0 0;padding:0;list-style:none}
+  .links li{border-bottom:1px solid var(--rule-soft)}
+  .links a{
+    display:flex;justify-content:space-between;gap:12px;align-items:baseline;
+    padding:13px 0;color:var(--ink);text-decoration:none;font-size:.93rem;
+  }
+  .links a span{color:var(--grey);font-size:.8rem;text-align:right;flex:none;max-width:45%}
+  .links a:hover{text-decoration:underline}
+  .tabs{display:flex;gap:8px;margin:16px 0 10px;flex-wrap:wrap}
+  .tabs button{
+    background:none;border:1px solid var(--rule);border-radius:999px;
+    padding:8px 15px;font-size:.85rem;color:var(--grey);
+  }
+  .tabs button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--shade)}
+  textarea.letter{
+    width:100%;min-height:290px;background:var(--card);
+    border:1px solid var(--rule);border-radius:var(--radius);
+    padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.83rem;line-height:1.6;color:var(--ink);resize:vertical;
+  }
+  .dir{margin:8px 0 0;padding:0;list-style:none}
+  .dir li{border-top:1px solid var(--rule-soft);padding:14px 0}
+  .dir .pn{font-weight:600;font-size:.97rem}
+  .dir .pn small{display:block;font-weight:400;color:var(--grey);font-size:.8rem;margin-top:1px}
+  .dir .contacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+  .dir .contacts a,.dir .contacts span{
+    border:1px solid var(--rule);border-radius:999px;padding:6px 12px;
+    font-size:.79rem;color:var(--ink-soft);text-decoration:none;
+  }
+  .dir .contacts a:hover{border-color:var(--ink);color:var(--ink)}
+  .said{font-size:.82rem;color:var(--grey);margin:10px 0 0;min-height:1.2em}
+
+  footer{
+    border-top:1px solid var(--rule);margin-top:34px;padding-top:16px;
+    font-size:.78rem;color:var(--grey);
+  }
+
+  @media (min-width:700px){
+    body{font-size:17px}
+    .statement{font-size:1.45rem}
+    .scale{gap:9px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brandline">
+      <div class="mark"><span class="needle"></span> Bússola Eleitoral</div>
+      <button class="theme" onclick="toggleTheme()" aria-label="Alternar entre tema claro e escuro">
+        <span class="glyph"></span><span id="themeLabel">Escuro</span>
+      </button>
+    </div>
+    <p>Vinte afirmações sobre a vida em Portugal. Nenhum partido é mencionado até ao fim.</p>
+  </header>
+
+  <!-- ========== INTRO ========== -->
+  <section class="screen on intro" id="intro">
+    <h1 class="lede">Comece pelo que lhe faz falta, não pelo rótulo.</h1>
+    <p>Cada afirmação descreve uma escolha concreta — e o que se perde ao fazê-la. Responda com a sua experiência: o que paga, o que espera, o que já lhe faltou.</p>
+    <p>No fim vê onde as suas respostas o colocam em seis temas, e que partidos ficam mais perto ou mais longe de si em cada um.</p>
+
+    <p class="epigraph">Desenvolvido para mitigar o jogo da ideologia e trazer as pessoas para a realidade política a partir daquilo de que precisam no dia a dia.</p>
+
+    <div class="facts">
+      <div class="fact"><b>20</b><span>afirmações, cerca de quatro minutos.</span></div>
+      <div class="fact"><b>6</b><span>temas: impostos, serviços públicos, valores sociais, imigração e segurança, sistema político, ambiente e território.</span></div>
+      <div class="fact"><b>0</b><span>dados guardados ou enviados. Tudo acontece dentro do seu navegador.</span></div>
+      <div class="fact"><b>+</b><span>no fim, um guia para exigir mudanças por escrito a quem decide — no país e na sua terra.</span></div>
+    </div>
+
+    <button class="primary" onclick="start()">Começar</button>
+
+    <details style="margin-top:26px">
+      <summary>Como é calculado o resultado</summary>
+      <div class="body">
+        <p>Cada resposta desloca-o num dos seis temas. As respostas marcadas como importantes pesam o dobro. As respostas “não tenho opinião” não contam para nada.</p>
+        <p>Os partidos estão posicionados nos mesmos seis temas a partir das posições que defendem publicamente e dos programas eleitorais. A percentagem é a proximidade entre a sua posição e a deles, tema a tema — não é uma recomendação de voto.</p>
+        <p>Estas posições são uma leitura resumida e discutível, e desatualizam-se. Trate o resultado como um ponto de partida para ler os programas, não como uma resposta.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ========== QUIZ ========== -->
+  <section class="screen" id="quiz">
+    <div class="counter"><span id="count"></span><span id="topic" class="topic" style="margin:0"></span></div>
+    <div class="track"><i id="fill"></i></div>
+
+    <p class="statement" id="statement"></p>
+    <p class="hint" id="hint"></p>
+
+    <div class="scale" id="scale"></div>
+
+    <div class="rowbtns" style="margin-bottom:14px">
+      <button class="weight" id="weight" aria-pressed="false" onclick="toggleWeight()">
+        <span class="box"></span> Este tema é importante para mim
+      </button>
+      <button class="ghost" id="back" onclick="back()">Voltar</button>
+    </div>
+
+    <button class="advance" id="advance" disabled onclick="advance()">Escolha uma resposta</button>
+  </section>
+
+  <!-- ========== REVISÃO ========== -->
+  <section class="screen" id="review">
+    <h2 class="rhead" style="margin-top:0">Reveja antes de ver o resultado</h2>
+    <p class="rsub">Toque em qualquer linha para mudar a resposta. Nada é calculado até carregar no botão em baixo.</p>
+    <ul class="rev" id="revList"></ul>
+    <button class="primary" style="margin-top:22px" onclick="results()">Ver o meu resultado</button>
+    <button class="ghost" style="width:100%;margin-top:10px" onclick="backToLast()">Voltar à última afirmação</button>
+  </section>
+
+  <!-- ========== RESULTADOS ========== -->
+  <section class="screen" id="results">
+    <h2 class="rhead">O seu retrato em seis temas</h2>
+    <p class="rsub">O ponto cheio é a sua posição. Os pontos claros são os partidos, no mesmo eixo.</p>
+
+    <div class="block" id="axes"></div>
+
+    <div class="block">
+      <h3>Quem está mais perto das suas respostas</h3>
+      <p class="note">Proximidade média nos temas em que respondeu. Percentagens próximas significam empate, não uma escolha óbvia.</p>
+      <div id="parties"></div>
+    </div>
+
+    <div class="disclaimer">
+      <b>Isto não é um conselho de voto.</b> Um partido pode estar perto de si nos temas e longe na competência, nas pessoas ou na forma de governar — coisas que nenhum teste mede. Confirme sempre nos programas eleitorais antes de decidir.
+    </div>
+
+    <details>
+      <summary>Onde concordou e onde divergiu</summary>
+      <div class="body" id="detail"></div>
+    </details>
+
+    <details>
+      <summary>Limites deste teste</summary>
+      <div class="body">
+        <ul>
+          <li>Seis temas não esgotam a política. Fica de fora, por exemplo, a política externa, a defesa e a organização do território.</li>
+          <li>As posições dos partidos são uma síntese feita por quem escreveu o teste. Outra pessoa informada colocaria alguns pontos noutro sítio.</li>
+          <li>Partidos mudam de posição, e este ficheiro não se atualiza sozinho.</li>
+          <li>A ordem e a forma das afirmações influenciam sempre alguma coisa, por mais cuidado que se tenha.</li>
+        </ul>
+      </div>
+    </details>
+
+    <section class="civic">
+      <p class="kicker">AGORA EXERÇA A SUA CIDADANIA</p>
+      <p class="call">Não fique de fora apenas a olhar. Exija hoje o que quer ver melhorado — a quem já votou ou tenciona votar. Votar de quatro em quatro anos é o mínimo; entre eleições, quem escreve é quem existe.</p>
+      <p class="call" style="font-size:.95rem;font-family:inherit">Quase ninguém sabe que tem o direito de escrever diretamente a um deputado, a um presidente de câmara ou a um ministério — e que essa entidade é obrigada por lei a registar e responder. Está no artigo 52.º da Constituição e na Lei n.º 43/90. Não custa dinheiro, não precisa de advogado, e pode ser feito por e-mail.</p>
+
+      <h3 style="margin:28px 0 12px;font-size:1rem">Como fazer um pedido que seja levado a sério</h3>
+      <ol class="steps">
+        <li><b>Escolha o destinatário certo.</b> Passeio esburacado, lixo, trânsito, escola primária, licenças: junta de freguesia ou câmara municipal. Hospitais, impostos, leis, polícia: deputado, ministério ou o organismo do Estado responsável. Um pedido enviado ao sítio errado só perde meses.</li>
+        <li><b>Uma questão por carta.</b> Um assunto, um local exato, um pedido concreto. “A rua X não tem passadeira junto à escola Y” move-se; “a cidade está abandonada” não.</li>
+        <li><b>Identifique-se.</b> Nome completo, morada e contacto. Mensagens anónimas podem ser arquivadas sem resposta.</li>
+        <li><b>Invoque o direito de petição.</b> Escreva que apresenta o pedido ao abrigo do artigo 52.º da Constituição e da Lei n.º 43/90. Deixa de ser um desabafo e passa a ser um processo com registo e resposta obrigatória.</li>
+        <li><b>Peça três coisas por escrito.</b> Se o assunto é da competência daquela entidade, que medidas estão previstas e em que prazo, e — se não for com eles — quem é o responsável.</li>
+        <li><b>Guarde tudo e marque a data.</b> O e-mail enviado é a sua prova. Sem resposta em cerca de 30 dias, insista, envie a mesma carta a deputados do seu círculo e considere o Provedor de Justiça.</li>
+        <li><b>Apareça.</b> As reuniões da câmara e as sessões da assembleia municipal são públicas e têm um período de intervenção do público, onde qualquer pessoa pode falar e obter resposta em ata. Está previsto na Lei n.º 75/2013.</li>
+      </ol>
+
+      <h3 style="margin:28px 0 6px;font-size:1rem">Quantas assinaturas mudam o que acontece à sua petição</h3>
+      <p class="note" style="margin:0 0 4px">Na Assembleia da República, o número de subscritores determina o tratamento — mas uma petição é válida com uma assinatura só.</p>
+      <div class="thresholds">
+        <div><b>1</b><span>É registada e tem direito a resposta.</span></div>
+        <div><b>+100</b><span>Tem de ser apreciada por uma comissão parlamentar, com um deputado relator.</span></div>
+        <div><b>+1 000</b><span>É publicada no Diário da Assembleia da República e quem a assina é ouvido em audição.</span></div>
+        <div><b>+2 500</b><span>É obrigatoriamente debatida na comissão competente.</span></div>
+        <div><b>+7 500</b><span>Sobe a debate no plenário, com os deputados todos presentes.</span></div>
+      </div>
+      <p class="note">Acima disto há a iniciativa legislativa de cidadãos: com 20 000 assinaturas, um grupo de cidadãos pode apresentar um projeto de lei ao parlamento.</p>
+
+      <h3 style="margin:30px 0 4px;font-size:1rem">Exigir uma mudança na sua terra</h3>
+      <p class="note" style="margin:0">Escreva o nome do seu concelho e a Bússola gera as ligações para quem decide lá.</p>
+      <div class="field">
+        <input id="city" type="text" placeholder="Ex.: Loures" autocomplete="address-level2"
+               onkeydown="if(event.key==='Enter')buildCity()">
+        <button onclick="buildCity()">Gerar ligações</button>
+      </div>
+      <ul class="links" id="cityLinks"></ul>
+
+      <h3 style="margin:30px 0 4px;font-size:1rem">Modelo de carta</h3>
+      <p class="note" style="margin:0">Substitua o que está entre parênteses retos. Escreva como fala; o que conta é ser concreto.</p>
+      <div class="tabs">
+        <button id="tab-camara" aria-pressed="true" onclick="setLetter('camara')">Para a câmara municipal</button>
+        <button id="tab-deputado" aria-pressed="false" onclick="setLetter('deputado')">Para um deputado</button>
+      </div>
+      <textarea class="letter" id="letter" spellcheck="false"></textarea>
+      <div class="rowbtns" style="margin-top:10px">
+        <button class="ghost" onclick="copyLetter()">Copiar carta</button>
+      </div>
+      <p class="said" id="copied"></p>
+
+      <h3 style="margin:30px 0 4px;font-size:1rem">Quem contactar a nível nacional</h3>
+      <p class="note" style="margin:0 0 8px">Telefones e e-mails da lista oficial de partidos da Comissão Nacional de Eleições. Se algum contacto mudar, a lista da CNE é a fonte a consultar.</p>
+      <ul class="dir" id="directory"></ul>
+
+      <ul class="links" style="margin-top:22px">
+        <li><a href="https://www.parlamento.pt/DeputadoGP/Paginas/Deputadoslista.aspx" target="_blank" rel="noopener">Todos os deputados em funções<span>parlamento.pt — procure pelo seu círculo eleitoral</span></a></li>
+        <li><a href="https://participacao.parlamento.pt/initiatives/?type=petitions" target="_blank" rel="noopener">Entregar ou assinar uma petição<span>participacao.parlamento.pt</span></a></li>
+        <li><a href="https://www.cne.pt/sites/default/files/dl/pp_contactos/pp_contactos_partidos_inscritos_tc.pdf" target="_blank" rel="noopener">Lista oficial de contactos dos partidos<span>Comissão Nacional de Eleições</span></a></li>
+      </ul>
+
+      <p class="note" style="margin-top:22px">Escrever a quem nos governa é um direito. Insultar, ameaçar ou perseguir não é, e destrói a única coisa que dá força ao seu pedido: ter razão e ser educado a dizê-lo.</p>
+    </section>
+
+    <button class="primary" style="margin-top:30px" onclick="restart()">Responder de novo</button>
+  </section>
+
+  <footer>
+    <div class="who">
+      <p class="name sig">Julio Lacerda (Eng. de Software - CREA-PA/BR)</p>
+      <p>Mestrando em Engenharia Informática no ISCTE-IUL. Fiz esta bússola por conta própria, sem encomenda de ninguém.</p>
+      <p>
+        O código e a metodologia estão abertos em
+        <a href="https://github.com/engjuliocez4r" target="_blank" rel="noopener">github.com/engjuliocez4r</a>.
+        Se isto lhe foi útil, deixe uma estrela no repositório.
+      </p>
+      <div class="proof">
+        <b>Teste você mesmo:</b> desligue o wi-fi e os dados móveis, e faça o questionário à mesma. Ele funciona na íntegra sem internet, porque tudo é calculado dentro do seu navegador. Uma página que funciona offline é uma página que não tem para onde enviar nada: não há servidor, não há conta, não há cookies, não há registo das suas respostas em lado nenhum.
+      </div>
+    </div>
+    <p style="margin:18px 0 0">Ferramenta informativa e independente, sem ligação a qualquer partido, candidatura ou campanha. Verifique os programas eleitorais e os sites oficiais dos partidos antes de votar.</p>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   EIXOS
+   pos = polo positivo (+2)   neg = polo negativo (−2)
+   ========================================================= */
+const AXES = {
+  fisc: {label:"Impostos e economia",      neg:"Estado redistribuidor",   pos:"Impostos baixos, mais mercado"},
+  serv: {label:"Serviços públicos",        neg:"Gestão pública direta",   pos:"Abertura ao privado"},
+  soc:  {label:"Valores sociais",          neg:"Progressista",            pos:"Conservador"},
+  seg:  {label:"Imigração e segurança",    neg:"Aberta e preventiva",     pos:"Restritiva e punitiva"},
+  inst: {label:"Sistema político",         neg:"Continuidade das instituições", pos:"Rutura e responsabilização"},
+  amb:  {label:"Ambiente e território",    neg:"Prioridade ao crescimento", pos:"Prioridade ao ambiente"}
+};
+
+/* =========================================================
+   AFIRMAÇÕES
+   dir = +1 concordar empurra para o polo positivo; −1 o contrário
+   Cada afirmação torna explícito o custo da escolha, para não
+   haver opções que ninguém recusaria.
+   ========================================================= */
+const Q = [
+ {ax:"fisc", dir:+1, t:"O IRS sobre os rendimentos do trabalho deve descer de forma significativa, mesmo que isso obrigue a cortar despesa do Estado.",
+  h:"Menos retido no salário, menos dinheiro disponível para serviços e apoios."},
+
+ {ax:"fisc", dir:-1, t:"Quem tem rendimentos altos deve pagar uma taxa de imposto bastante superior à de quem tem rendimentos baixos, para financiar apoios e serviços.",
+  h:"Mais progressividade fiscal, com o risco de desincentivar quem ganha mais."},
+
+ {ax:"fisc", dir:+1, t:"Baixar impostos e burocracia às empresas é a forma mais eficaz de criar emprego e subir salários.",
+  h:"A alternativa é subir salários por via da lei e da negociação coletiva."},
+
+ {ax:"fisc", dir:-1, t:"Na habitação, o Estado deve intervir diretamente — limitar rendas e construir casas públicas — em vez de sobretudo facilitar a construção privada.",
+  h:"Intervenção com efeito rápido para quem arrenda, com risco de retrair a oferta."},
+
+ {ax:"serv", dir:+1, t:"Quando o SNS não consegue responder nos prazos, o Estado deve pagar a consulta ou cirurgia no privado.",
+  h:"Resposta mais rápida ao doente, dinheiro público a sair do serviço público."},
+
+ {ax:"serv", dir:-1, t:"A saúde e a educação devem funcionar sobretudo com pessoal contratado diretamente pelo Estado, reduzindo prestadores externos e empresas intermediárias.",
+  h:"Menos intermediários, menos flexibilidade para cobrir falhas e picos."},
+
+ {ax:"serv", dir:+1, t:"As famílias deviam poder usar apoio público para escolher a escola dos filhos, pública ou privada.",
+  h:"Mais escolha para as famílias, com risco de esvaziar a escola pública."},
+
+ {ax:"serv", dir:+1, t:"Empresas públicas com prejuízos crónicos devem ser privatizadas ou encerradas, mesmo que sirvam zonas onde o privado não tem interesse em ir.",
+  h:"Menos custo para o contribuinte, menos garantia de serviço fora dos grandes centros."},
+
+ {ax:"soc",  dir:+1, t:"Em temas como aborto, eutanásia e identidade de género, as leis portuguesas foram longe demais.",
+  h:"Trata-se de travar ou reverter alterações legais das últimas décadas."},
+
+ {ax:"soc",  dir:-1, t:"O Estado deve agir ativamente pela igualdade entre homens e mulheres e pela proteção de minorias, incluindo com legislação específica ou quotas.",
+  h:"Ação deliberada do Estado, em vez de deixar a mudança à sociedade."},
+
+ {ax:"soc",  dir:+1, t:"A família tradicional e os valores religiosos deviam ter mais peso nas decisões do Estado, por exemplo na escola.",
+  h:"Mais peso a estes valores nas políticas públicas, menos neutralidade do Estado."},
+
+ {ax:"seg",  dir:+1, t:"Portugal deve restringir claramente a entrada de imigrantes, mesmo que faltem trabalhadores na agricultura, construção e cuidados a idosos.",
+  h:"Menos entradas, com efeito conhecido na mão-de-obra e nos descontos para a Segurança Social."},
+
+ {ax:"seg",  dir:-1, t:"A imigração tem sido, no conjunto, positiva para a economia portuguesa e para sustentar as pensões.",
+  h:"Avaliação global, não sobre casos concretos de integração."},
+
+ {ax:"seg",  dir:+1, t:"As penas devem ser mais pesadas e a polícia deve ter mais poderes, mesmo que isso implique mais despesa e mais controlo sobre os cidadãos.",
+  h:"Mais segurança percebida, mais custo e mais poder do Estado sobre todos."},
+
+ {ax:"inst", dir:+1, t:"Os principais problemas do país devem-se sobretudo à corrupção e ao compadrio entre políticos e grupos económicos.",
+  h:"Causa principal, e não apenas um problema entre vários."},
+
+ {ax:"inst", dir:-1, t:"Apesar dos erros, os partidos que já governaram continuam a ser quem melhor sabe gerir o Estado.",
+  h:"Experiência de governo como vantagem, e não como parte do problema."},
+
+ {ax:"inst", dir:+1, t:"O sistema político precisa de uma mudança profunda: menos deputados e cargos, responsabilização penal mais dura e mais referendos.",
+  h:"Reforma de fundo das regras, e não só melhor escolha de pessoas."},
+
+ {ax:"amb",  dir:+1, t:"Portugal deve acelerar a transição climática mesmo que isso aumente custos a curto prazo para empresas e consumidores.",
+  h:"Custo hoje, benefício difuso e a prazo."},
+
+ {ax:"amb",  dir:-1, t:"Grandes projetos que criem emprego — indústria, minas, obras, turismo — devem avançar mesmo com impacto ambiental relevante.",
+  h:"Emprego e receita agora, contra proteção do território."},
+
+ {ax:"amb",  dir:+1, t:"O bem-estar animal e a proteção da natureza devem impor limites reais a atividades económicas e tradições estabelecidas.",
+  h:"Limites com força de lei, incluindo onde há hábitos enraizados."}
+];
+
+/* =========================================================
+   POSIÇÕES DOS PARTIDOS (escala −2 a +2 em cada eixo)
+   Síntese das posições publicamente defendidas. Aproximada,
+   discutível e datada — edite este bloco para a atualizar.
+   ========================================================= */
+const PARTIES = [
+ {n:"PCP / CDU", d:"Partido Comunista Português", site:"https://www.pcp.pt", mail:"pcp@pcp.pt", tel:"217 813 800",
+  p:{fisc:-2,   serv:-2,   soc:-0.5, seg:-1,   inst:0.5, amb:0}},
+ {n:"Bloco de Esquerda", d:"BE", site:"https://www.bloco.org", mail:"bloco.esquerda@bloco.org", tel:"213 510 510",
+  p:{fisc:-2,   serv:-2,   soc:-2,   seg:-2,   inst:1,   amb:1.5}},
+ {n:"Livre", d:"L", site:"https://partidolivre.pt", mail:"info@partidolivre.pt", tel:"",
+  p:{fisc:-1.5, serv:-1.5, soc:-2,   seg:-2,   inst:0.5, amb:2}},
+ {n:"PAN", d:"Pessoas-Animais-Natureza", site:"https://www.pan.com.pt", mail:"geral@pan.com.pt", tel:"213 426 226",
+  p:{fisc:-1,   serv:-1,   soc:-1.5, seg:-1.5, inst:0.5, amb:2}},
+ {n:"PS", d:"Partido Socialista", site:"https://www.ps.pt", mail:"portal@ps.pt", tel:"213 822 000",
+  p:{fisc:-1,   serv:-0.5, soc:-1,   seg:-0.5, inst:-1,  amb:1}},
+ {n:"PSD", d:"Social Democrata, coligado na AD", site:"https://www.psd.pt", mail:"psd@psd.pt", tel:"213 918 500",
+  p:{fisc:1,    serv:1,    soc:0.5,  seg:0.5,  inst:-0.5,amb:0.5}},
+ {n:"CDS-PP", d:"Democrata-Cristão, coligado na AD", site:"https://www.cds.pt", mail:"cds-pp@cds.pt", tel:"218 814 700",
+  p:{fisc:1.5,  serv:1.5,  soc:2,    seg:1,    inst:-0.5,amb:0}},
+ {n:"Iniciativa Liberal", d:"IL", site:"https://www.liberal.pt", mail:"info@liberal.pt", tel:"",
+  p:{fisc:2,    serv:2,    soc:-0.5, seg:-0.5, inst:1.5, amb:0.5}},
+ {n:"Chega", d:"CH", site:"https://partidochega.pt", mail:"geral@partidochega.pt", tel:"213 961 244",
+  p:{fisc:1.5,  serv:1,    soc:2,    seg:2,    inst:2,   amb:-1}}
+];
+
+/* =========================================================
+   TEMA — arranca pela preferência do sistema, alterna à mão
+   ========================================================= */
+const media = window.matchMedia('(prefers-color-scheme: dark)');
+setTheme(media.matches ? 'dark' : 'light');
+media.addEventListener('change', e => setTheme(e.matches ? 'dark' : 'light'));
+
+function setTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode);
+  const l = document.getElementById('themeLabel');
+  if(l) l.textContent = mode === 'dark' ? 'Claro' : 'Escuro';
+}
+function toggleTheme(){
+  setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+let i = 0;
+const ans = new Array(Q.length).fill(null);   // −2..+2 ou null
+const imp = new Array(Q.length).fill(false);  // peso duplo
+
+const SCALE = [
+  {v: 2, l:"Concordo totalmente"},
+  {v: 1, l:"Concordo em parte"},
+  {v: 0, l:"Não tenho opinião formada"},
+  {v:-1, l:"Discordo em parte"},
+  {v:-2, l:"Discordo totalmente"}
+];
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'instant' in window ? 'instant' : 'auto'});
+}
+
+let fromReview = false;
+
+function start(){ i=0; fromReview=false; show('quiz'); render(); }
+
+function render(){
+  const q = Q[i];
+  document.getElementById('count').textContent = `Afirmação ${i+1} de ${Q.length}`;
+  document.getElementById('topic').textContent = AXES[q.ax].label;
+  document.getElementById('fill').style.width = (i/Q.length*100)+'%';
+  document.getElementById('statement').textContent = q.t;
+  document.getElementById('hint').textContent = q.h;
+
+  const box = document.getElementById('scale');
+  box.innerHTML = '';
+  SCALE.forEach(s=>{
+    const b = document.createElement('button');
+    b.className = 'opt' + (ans[i] === s.v ? ' sel' : '');
+    b.dataset.v = s.v;
+    b.innerHTML = `<span class="dot"></span><span>${s.l}</span>`;
+    b.onclick = ()=>select(s.v);   // escolher NÃO avança
+    box.appendChild(b);
+  });
+
+  const w = document.getElementById('weight');
+  w.setAttribute('aria-pressed', imp[i] ? 'true' : 'false');
+  document.getElementById('back').style.display = i===0 ? 'none' : '';
+  updateAdvance();
+}
+
+function updateAdvance(){
+  const b = document.getElementById('advance');
+  const escolhido = ans[i] !== null;
+  b.disabled = !escolhido;
+  b.textContent = !escolhido ? 'Escolha uma resposta'
+    : fromReview ? 'Guardar e voltar à revisão'
+    : (i === Q.length-1 ? 'Rever as minhas respostas' : 'Avançar');
+}
+
+/* escolher apenas marca a opção; quem avança é o utilizador */
+function select(v){
+  ans[i] = v;
+  document.querySelectorAll('#scale .opt').forEach(el=>
+    el.classList.toggle('sel', Number(el.dataset.v) === v));
+  updateAdvance();
+}
+
+function advance(){
+  if(ans[i] === null) return;
+  if(fromReview){ fromReview = false; renderReview(); show('review'); return; }
+  if(i < Q.length-1){ i++; render(); }
+  else { document.getElementById('fill').style.width='100%'; renderReview(); show('review'); }
+}
+
+function toggleWeight(){
+  imp[i] = !imp[i];
+  document.getElementById('weight').setAttribute('aria-pressed', imp[i] ? 'true':'false');
+}
+
+function back(){
+  if(fromReview){ fromReview = false; renderReview(); show('review'); return; }
+  if(i>0){ i--; render(); }
+}
+
+/* ---------- revisão ---------- */
+function labelOf(v){
+  const s = SCALE.find(x=>x.v===v);
+  return s ? s.l : 'Sem resposta';
+}
+function renderReview(){
+  const host = document.getElementById('revList');
+  host.innerHTML = Q.map((q,k)=>`
+    <li><button onclick="edit(${k})">
+      <span class="n">${k+1}</span>
+      <span class="q">${q.t}</span>
+      <span class="edit">alterar</span>
+      <span class="a"><b>${labelOf(ans[k])}</b>${imp[k]?'<span>· tema importante</span>':''}</span>
+    </button></li>`).join('');
+}
+function edit(k){
+  i = k; fromReview = true; show('quiz'); render();
+}
+function backToLast(){
+  i = Q.length-1; fromReview = false; show('quiz'); render();
+}
+
+function restart(){
+  ans.fill(null); imp.fill(false); i=0; fromReview=false;
+  document.getElementById('fill').style.width='0%';
+  show('intro');
+}
+
+/* =========================================================
+   CÁLCULO
+   ========================================================= */
+function userAxes(){
+  const out = {};
+  for(const ax in AXES){
+    // Os dois sentidos são medidos em separado e só depois combinados, para
+    // que quem responde "concordo" a tudo caia exatamente no centro, mesmo
+    // quando o tema tem mais afirmações num sentido do que no outro.
+    const g = {1:{sum:0,w:0}, '-1':{sum:0,w:0}};
+    let total = 0;
+    Q.forEach((q,k)=>{
+      if(q.ax!==ax || ans[k]===null || ans[k]===0) return;
+      const w = imp[k] ? 2 : 1;
+      g[q.dir].sum += ans[k]*q.dir*w;
+      g[q.dir].w   += 2*w;
+      total += w;
+    });
+    const parts = [];
+    if(g[1].w)    parts.push((g[1].sum   / g[1].w)   * 2);
+    if(g['-1'].w) parts.push((g['-1'].sum/ g['-1'].w)* 2);
+    out[ax] = parts.length
+      ? {val: parts.reduce((a,b)=>a+b,0)/parts.length, weight: total, answered:true}
+      : {val:0, weight:0, answered:false};
+  }
+  return out;
+}
+
+function results(){
+  const u = userAxes();
+  show('results');
+  drawAxes(u);
+  drawParties(u);
+  drawDetail(u);
+  drawDirectory();
+  setLetter(currentLetter);
+}
+
+const pct = v => (v+2)/4*100;   // −2..+2  →  0..100
+
+function drawAxes(u){
+  const host = document.getElementById('axes');
+  host.innerHTML = '<h3>Onde as suas respostas o colocam</h3><p class="note">Cada linha vai de um extremo ao outro. Temas sem resposta aparecem a vazio e não contam para as percentagens.</p>';
+  for(const ax in AXES){
+    const a = AXES[ax], d = u[ax];
+    const dots = PARTIES.map(p =>
+      `<span class="party" style="left:${pct(p.p[ax]).toFixed(1)}%" title="${p.n}"></span>`).join('');
+    host.insertAdjacentHTML('beforeend', `
+      <div class="axis ${d.answered?'':'skipped'}">
+        <div class="name">${a.label}${d.answered?'':' — sem respostas'}</div>
+        <div class="line">
+          <span class="rail"></span><span class="mid"></span>
+          ${dots}
+          <span class="you" style="left:${pct(d.val).toFixed(1)}%"></span>
+        </div>
+        <div class="poles"><span>${a.neg}</span><span>${a.pos}</span></div>
+      </div>`);
+  }
+}
+
+function drawParties(u){
+  const host = document.getElementById('parties');
+  host.innerHTML = '';
+  const totalW = Object.values(u).reduce((s,d)=>s+d.weight,0);
+
+  if(!totalW){
+    host.innerHTML = '<p class="note">Respondeu “não tenho opinião” a tudo, por isso não há nada para comparar. Volte a responder marcando pelo menos alguns temas.</p>';
+    return;
+  }
+
+  const scored = PARTIES.map(p=>{
+    let dist=0;
+    for(const ax in AXES){
+      if(!u[ax].answered) continue;
+      dist += u[ax].weight * Math.abs(u[ax].val - p.p[ax]);
+    }
+    return {...p, score: Math.round((1 - dist/(totalW*4))*100)};
+  }).sort((a,b)=>b.score-a.score);
+
+  const top = scored[0].score;
+  scored.forEach(p=>{
+    host.insertAdjacentHTML('beforeend', `
+      <div class="party-row ${p.score===top?'lead':''}">
+        <div class="party-top">
+          <span class="nm">${p.n}${p.d?`<small>${p.d}</small>`:''}</span>
+          <span class="pc">${p.score}%</span>
+        </div>
+        <div class="bar"><i style="width:${p.score}%"></i></div>
+      </div>`);
+  });
+
+  if(scored[0].score - scored[1].score <= 4){
+    host.insertAdjacentHTML('beforeend',
+      `<p class="gap">Os dois primeiros estão a ${scored[0].score-scored[1].score} pontos de distância. Nesta margem, o teste não os distingue.</p>`);
+  }
+}
+
+/* =========================================================
+   CIDADANIA — ligações locais, modelos de carta, diretório
+   ========================================================= */
+function esc(t){
+  return String(t).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function q(t){ return 'https://www.google.com/search?q=' + encodeURIComponent(t); }
+
+function buildCity(){
+  const raw = document.getElementById('city').value.trim();
+  const host = document.getElementById('cityLinks');
+  if(!raw){
+    host.innerHTML = '<li><a style="cursor:default">Escreva o nome do concelho para gerar as ligações.<span></span></a></li>';
+    return;
+  }
+  const c = raw.replace(/\s+/g,' ');
+  const rows = [
+    ["Câmara Municipal de "+c, "contactos, e-mail e balcão online", q("Câmara Municipal de "+c+" contactos")],
+    ["Assembleia Municipal de "+c, "datas das sessões e inscrição para falar", q("Assembleia Municipal de "+c+" sessões período de intervenção do público")],
+    ["A sua junta de freguesia", "o nível mais próximo, para ruas e espaços", q("juntas de freguesia "+c+" contactos")],
+    ["Orçamento participativo de "+c, "propor e votar obras, se existir no concelho", q("orçamento participativo "+c)],
+    ["Reclamações e sugestões de "+c, "portal do munícipe ou balcão de atendimento", q("portal do munícipe "+c+" reclamações sugestões")],
+    ["Deputados eleitos pelo seu distrito", "quem o representa no parlamento", q("deputados círculo eleitoral "+c+" Assembleia da República")]
+  ];
+  host.innerHTML = rows.map(r =>
+    `<li><a href="${esc(r[2])}" target="_blank" rel="noopener">${esc(r[0])}<span>${esc(r[1])}</span></a></li>`
+  ).join('');
+  setLetter(currentLetter);
+}
+
+let currentLetter = 'camara';
+const LETTERS = {
+  camara: c => `Assunto: [problema em uma frase] — pedido de esclarecimento e de intervenção
+
+Exmo.(a) Senhor(a) Presidente da Câmara Municipal de ${c}
+
+Sou residente em ${c} e escrevo ao abrigo do direito de petição, previsto no artigo 52.º da Constituição e na Lei n.º 43/90, de 10 de agosto.
+
+Situação: [o que se passa, em que rua ou local exato, desde quando, quem é afetado]
+
+Pedido: [o que quer que seja feito, em concreto]
+
+Solicito que me informe, por escrito:
+1. se o assunto é da competência do município;
+2. que medidas estão previstas e em que prazo;
+3. caso não seja da vossa competência, qual a entidade responsável.
+
+Com os melhores cumprimentos,
+
+[Nome completo]
+[Morada em ${c}]
+[Telefone] · [E-mail]
+[Data]`,
+
+  deputado: c => `Assunto: [tema em uma frase] — pedido de intervenção parlamentar
+
+Exmo.(a) Senhor(a) Deputado(a) [nome]
+
+Sou eleitor(a) e resido em ${c}. Escrevo-lhe por ter sido eleito(a) pelo meu círculo eleitoral.
+
+O que se passa: [descreva o problema com factos, datas e, se puder, números]
+
+Como me afeta: [uma ou duas frases sobre o efeito concreto na sua vida ou na sua zona]
+
+O que peço: que considere levar esta questão ao Governo, por pergunta ou requerimento, e que me informe da posição do seu grupo parlamentar sobre o assunto.
+
+Fico disponível para prestar mais informação e agradeço uma resposta.
+
+Com os melhores cumprimentos,
+
+[Nome completo]
+[Morada] · [Telefone] · [E-mail]
+[Data]`
+};
+
+function setLetter(kind){
+  currentLetter = kind;
+  const city = (document.getElementById('city').value.trim() || '[concelho]').replace(/\s+/g,' ');
+  document.getElementById('letter').value = LETTERS[kind](city);
+  document.getElementById('tab-camara').setAttribute('aria-pressed', kind==='camara');
+  document.getElementById('tab-deputado').setAttribute('aria-pressed', kind==='deputado');
+  document.getElementById('copied').textContent = '';
+}
+
+function copyLetter(){
+  const ta = document.getElementById('letter');
+  const msg = document.getElementById('copied');
+  ta.select(); ta.setSelectionRange(0, 99999);
+  const done = () => { msg.textContent = 'Carta copiada. Cole no seu e-mail e preencha o que está entre parênteses.'; };
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(ta.value).then(done).catch(fallback);
+  } else { fallback(); }
+  function fallback(){
+    try{
+      document.execCommand('copy') ? done()
+        : msg.textContent = 'O texto está selecionado. Copie com Ctrl+C, ou toque e escolha Copiar.';
+    }catch(e){
+      msg.textContent = 'O texto está selecionado. Copie com Ctrl+C, ou toque e escolha Copiar.';
+    }
+  }
+}
+
+function drawDirectory(){
+  const host = document.getElementById('directory');
+  const list = [...PARTIES].sort((a,b)=>a.n.localeCompare(b.n,'pt'));
+  host.innerHTML = list.map(p=>`
+    <li>
+      <div class="pn">${esc(p.n)}${p.d?`<small>${esc(p.d)}</small>`:''}</div>
+      <div class="contacts">
+        <a href="${esc(p.site)}" target="_blank" rel="noopener">Site oficial</a>
+        <a href="mailto:${esc(p.mail)}">${esc(p.mail)}</a>
+        ${p.tel?`<a href="tel:+351${p.tel.replace(/\s/g,'')}">${esc(p.tel)}</a>`:''}
+      </div>
+    </li>`).join('');
+}
+
+function drawDetail(u){
+  const host = document.getElementById('detail');
+  const answered = Object.keys(AXES).filter(ax=>u[ax].answered);
+  if(!answered.length){ host.innerHTML = '<p>Sem respostas suficientes para detalhar.</p>'; return; }
+
+  const rows = answered.map(ax=>{
+    const near = [...PARTIES].sort((a,b)=>
+      Math.abs(u[ax].val-a.p[ax]) - Math.abs(u[ax].val-b.p[ax]));
+    const side = u[ax].val > 0.4 ? AXES[ax].pos
+               : u[ax].val < -0.4 ? AXES[ax].neg
+               : "posição intermédia";
+    return `<li><b>${AXES[ax].label}</b> — ficou do lado “${side}”.
+            Mais perto: ${near[0].n}. Mais longe: ${near[near.length-1].n}.</li>`;
+  }).join('');
+
+  host.innerHTML = `<p>Tema a tema, com base apenas nas afirmações a que respondeu:</p><ul>${rows}</ul>
+    <p>Se algum destes resultados o surpreende, é aí que vale a pena ler o programa em vez de confiar no teste.</p>`;
+}
+</script>
+</body>
+</html>
