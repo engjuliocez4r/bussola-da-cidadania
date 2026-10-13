@@ -1,20 +1,33 @@
-# Bússola Eleitoral
+# Bússola da Cidadania
 
-Um questionário de orientação política para Portugal, em ficheiro único, que funciona offline e não recolhe dados.
+Ferramenta de literacia cívica para Portugal. Ficheiro único, funciona offline, não recolhe qualquer dado.
 
-**Experimentar:** https://engjuliocez4r.github.io/bussola-eleitoral/
+**Experimentar:** https://engjuliocez4r.github.io/bussola-da-cidadania/
 
 ---
 
 ## O que é
 
-Vinte afirmações sobre política portuguesa. O resultado coloca quem responde em seis temas — impostos, serviços públicos, valores sociais, imigração e segurança, sistema político, ambiente — e mostra que partidos ficam mais perto ou mais longe em cada um.
+Vinte afirmações sobre decisões públicas que afetam o dia a dia em Portugal. Cada uma descreve uma escolha real e declara o que ela custa, porque toda a decisão pública é uma troca.
 
-Não é uma recomendação de voto. É um ponto de partida para ler os programas.
+O resultado situa quem responde em seis temas — impostos, serviços públicos, valores sociais, imigração e segurança, funcionamento das instituições, ambiente e território — e indica a proximidade face ao que é defendido por quem tem assento na Assembleia da República.
+
+A segunda metade é um guia prático de participação: como apresentar um pedido a um órgão público, o que é o direito de petição, que número de subscritores produz que efeito, e como chegar aos órgãos do próprio concelho.
 
 ## Porque existe
 
-A maior parte das pessoas escolhe um partido primeiro e as opiniões depois. Esta ferramenta inverte a ordem: começa pelo que falta na vida de quem responde, e só no fim mostra onde isso cai no mapa político.
+A opinião sobre assuntos públicos costuma formar-se ao contrário: primeiro a pertença, depois as posições. Esta ferramenta inverte a ordem — parte da experiência concreta de quem responde e só no fim mostra onde isso se situa no mapa.
+
+E não termina no diagnóstico. Saber onde se está serve de pouco a quem não sabe que pode escrever a um deputado ou a uma câmara municipal e obter resposta. A segunda metade existe para isso.
+
+## O que este projeto resolve, em termos de engenharia
+
+Um questionário que classifica posições é trivial de construir e muito fácil de enviesar. Os problemas tratados aqui:
+
+- **Enviesamento pela formulação.** Cada afirmação declara o custo da escolha, para não existirem opções que ninguém recusaria.
+- **Viés de aquiescência.** Quem responde sempre a mesma coisa tenderia a acumular num extremo. Resolvido com itens em sentidos opostos dentro de cada tema e com medição separada por sentido antes da combinação.
+- **Confiança do utilizador.** Zero pedidos de rede, zero armazenamento, verificável por qualquer pessoa sem conhecimentos técnicos.
+- **Distribuição.** Ficheiro único, sem dependências, sem build, sem instalação. Funciona aberto do disco.
 
 ## Como é calculado
 
@@ -34,11 +47,13 @@ Nenhuma afirmação apresenta como facto algo que está em disputa política.
 
 Não há servidor, conta, cookies, analytics nem qualquer pedido de rede. As respostas são calculadas no navegador e desaparecem ao fechar a página.
 
-**Verificação em cinco segundos:** desligue o wi-fi e faça o questionário à mesma. Funciona na íntegra. Uma página que funciona offline não tem para onde enviar nada.
+**Verificação em cinco segundos:** com a página já aberta, desligue a rede e faça o questionário até ao fim. Funciona na íntegra, porque depois de carregada a página não faz mais nenhum pedido. Em alternativa, descarregue `index.html` e abra-o sem rede nenhuma — dá o mesmo resultado.
 
-## Posição dos partidos
+Quem quiser confirmar ao detalhe: abra as ferramentas de programador do navegador, separador *Network*, e verá que durante todo o questionário não sai um único pedido.
 
-O array `PARTIES` em `index.html` coloca nove partidos numa escala de −2 a +2 em cada um dos seis temas, a partir das posições que defendem publicamente.
+## Posicionamento
+
+O array `PARTIES` em `index.html` situa as nove forças com representação parlamentar numa escala de −2 a +2 em cada um dos seis temas, a partir das posições que defendem publicamente.
 
 Esta é a parte discutível do projeto, e está isolada de propósito. Se discorda de um posicionamento, abra uma *issue* com o partido, o tema e a referência — programa eleitoral, declaração pública ou sentido de voto no Parlamento. Correções fundamentadas são bem-vindas e ficam registadas no histórico do repositório.
 
@@ -66,4 +81,4 @@ MIT. Ver `LICENSE`.
 
 Julio Lacerda (Eng. de Software - CREA-PA/BR), mestrando em Engenharia Informática no ISCTE-IUL.
 
-Projeto feito por conta própria, sem encomenda nem financiamento de qualquer partido, candidatura ou campanha.
+Projeto pessoal, feito por conta própria, sem encomenda nem financiamento de qualquer partido, candidatura, campanha ou organização.

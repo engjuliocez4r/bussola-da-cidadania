@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>Bússola Eleitoral — o que as suas prioridades dizem sobre o seu voto</title>
+<title>Bússola da Cidadania — orientação para quem quer compreender e participar</title>
 <script>document.documentElement.setAttribute("data-theme",window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");</script>
 <style>
   :root{
@@ -389,27 +389,27 @@
 
   <header class="top">
     <div class="brandline">
-      <div class="mark"><span class="needle"></span> Bússola Eleitoral</div>
+      <div class="mark"><span class="needle"></span> Bússola da Cidadania</div>
       <button class="theme" onclick="toggleTheme()" aria-label="Alternar entre tema claro e escuro">
         <span class="glyph"></span><span id="themeLabel">Escuro</span>
       </button>
     </div>
-    <p>Vinte afirmações sobre a vida em Portugal. Nenhum partido é mencionado até ao fim.</p>
+    <p>Uma ferramenta de literacia cívica: vinte afirmações sobre a vida em Portugal, e um guia prático para participar.</p>
   </header>
 
   <!-- ========== INTRO ========== -->
   <section class="screen on intro" id="intro">
-    <h1 class="lede">Comece pelo que lhe faz falta, não pelo rótulo.</h1>
-    <p>Cada afirmação descreve uma escolha concreta — e o que se perde ao fazê-la. Responda com a sua experiência: o que paga, o que espera, o que já lhe faltou.</p>
-    <p>No fim vê onde as suas respostas o colocam em seis temas, e que partidos ficam mais perto ou mais longe de si em cada um.</p>
+    <h1 class="lede">Compreender primeiro. Participar a seguir.</h1>
+    <p>As decisões públicas que mais mexem com o dia a dia — o que paga de impostos, quanto espera por uma consulta, o que acontece na sua rua — raramente são discutidas pelo que são. Esta ferramenta propõe o caminho inverso: partir da sua experiência concreta e só depois olhar para o mapa.</p>
+    <p>Cada afirmação descreve uma escolha real e diz o que se perde ao fazê-la. No fim fica a saber onde as suas respostas o situam em seis temas de política pública, como esses temas se relacionam com as posições defendidas pelas forças políticas representadas na Assembleia da República, e, sobretudo, como fazer chegar um pedido concreto a quem decide.</p>
 
-    <p class="epigraph">Desenvolvido para mitigar o jogo da ideologia e trazer as pessoas para a realidade política a partir daquilo de que precisam no dia a dia.</p>
+    <p class="epigraph">Feita para quem quer formar uma opinião a partir da própria experiência, e não a partir de rótulos herdados. Compreender como o sistema funciona é o primeiro passo para o usar.</p>
 
     <div class="facts">
       <div class="fact"><b>20</b><span>afirmações, cerca de quatro minutos.</span></div>
       <div class="fact"><b>6</b><span>temas: impostos, serviços públicos, valores sociais, imigração e segurança, sistema político, ambiente e território.</span></div>
       <div class="fact"><b>0</b><span>dados guardados ou enviados. Tudo acontece dentro do seu navegador.</span></div>
-      <div class="fact"><b>+</b><span>no fim, um guia para exigir mudanças por escrito a quem decide — no país e na sua terra.</span></div>
+      <div class="fact"><b>+</b><span>no fim, um guia prático de participação: como apresentar um pedido, uma petição ou um requerimento, no país e no seu concelho.</span></div>
     </div>
 
     <button class="primary" onclick="start()">Começar</button>
@@ -418,7 +418,7 @@
       <summary>Como é calculado o resultado</summary>
       <div class="body">
         <p>Cada resposta desloca-o num dos seis temas. As respostas marcadas como importantes pesam o dobro. As respostas “não tenho opinião” não contam para nada.</p>
-        <p>Os partidos estão posicionados nos mesmos seis temas a partir das posições que defendem publicamente e dos programas eleitorais. A percentagem é a proximidade entre a sua posição e a deles, tema a tema — não é uma recomendação de voto.</p>
+        <p>As forças políticas com representação parlamentar estão situadas nos mesmos seis temas, a partir das posições que defendem publicamente e dos programas que apresentam. A percentagem indica proximidade temática, tema a tema. Não é, e não pretende ser, uma recomendação de voto.</p>
         <p>Estas posições são uma leitura resumida e discutível, e desatualizam-se. Trate o resultado como um ponto de partida para ler os programas, não como uma resposta.</p>
       </div>
     </details>
@@ -561,7 +561,7 @@
         Se isto lhe foi útil, deixe uma estrela no repositório.
       </p>
       <div class="proof">
-        <b>Teste você mesmo:</b> desligue o wi-fi e os dados móveis, e faça o questionário à mesma. Ele funciona na íntegra sem internet, porque tudo é calculado dentro do seu navegador. Uma página que funciona offline é uma página que não tem para onde enviar nada: não há servidor, não há conta, não há cookies, não há registo das suas respostas em lado nenhum.
+        <b>Teste você mesmo:</b> com esta página já aberta, ligue o modo avião ou desligue o wi-fi e os dados móveis, e responda às vinte afirmações até ao resultado. Funciona na íntegra, porque depois de carregada a página não faz mais nenhum pedido à internet — tudo é calculado dentro do seu navegador. Para ser ainda mais exigente, descarregue o ficheiro do GitHub e abra-o no seu computador sem rede nenhuma: dá exatamente o mesmo. Uma página que funciona assim não tem para onde enviar nada: não há servidor, conta, cookies nem registo das suas respostas em lado algum.
       </div>
     </div>
     <p style="margin:18px 0 0">Ferramenta informativa e independente, sem ligação a qualquer partido, candidatura ou campanha. Verifique os programas eleitorais e os sites oficiais dos partidos antes de votar.</p>
@@ -578,7 +578,7 @@ const AXES = {
   serv: {label:"Serviços públicos",        neg:"Gestão pública direta",   pos:"Abertura ao privado"},
   soc:  {label:"Valores sociais",          neg:"Progressista",            pos:"Conservador"},
   seg:  {label:"Imigração e segurança",    neg:"Aberta e preventiva",     pos:"Restritiva e punitiva"},
-  inst: {label:"Sistema político",         neg:"Continuidade das instituições", pos:"Rutura e responsabilização"},
+  inst: {label:"Funcionamento das instituições", neg:"Continuidade institucional", pos:"Rutura e responsabilização"},
   amb:  {label:"Ambiente e território",    neg:"Prioridade ao crescimento", pos:"Prioridade ao ambiente"}
 };
 
